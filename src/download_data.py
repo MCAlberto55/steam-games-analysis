@@ -1,10 +1,14 @@
 import kagglehub
 import pandas as pd
 import os
+from src.config import RAW_DATA_PATH
 
-path = kagglehub.dataset_download("jypenpen54534/steam-games-dataset-2021-2025-65k")
 
-file_path = os.path.join(path, "a_steam_data_2021_2025.csv")
+def get_data():
 
-steam_data = pd.read_csv(file_path)
-print(steam_data.head())
+    path = kagglehub.dataset_download(RAW_DATA_PATH)
+
+    file_path = os.path.join(path, "a_steam_data_2021_2025.csv")
+
+    steam_data = pd.read_csv(file_path)
+    return steam_data
