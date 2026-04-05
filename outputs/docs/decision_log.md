@@ -22,4 +22,8 @@ I adopted this structure as a standard for better project organization, discover
 ## Limitations
 - Due to the nature of the dataset, I couldn't perform a comparison beetween Deluxe Editions and Remakes to it's original game. So I decided not to infer a Deluxe or Remake game using their names.
 ## Lessons Learned
-- Learned about sparse columns and how they are useful to save memory storing only non-zero values. Additionally, used uint8 to represent the 1's in a smaller format than int64.
+- Sparse columns reduce memory usage by storing only non-zero values, something useful when training models with a lot of data. 
+- Utilized uint8 to represent binary values, significantly reducing the memory footprint compared to int64.
+- Using Parquet files preserves schema and dtypes, so I don't need to specify uint8 and datetime types on reading.
+
+# Exploratory Data Analysis
