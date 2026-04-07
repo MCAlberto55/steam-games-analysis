@@ -14,7 +14,7 @@ I adopted this structure as a standard for better project organization, discover
 - 'name': Trim whitespace. The games have a unique ID, so I don't need to worry about games with the same name, I'll use the names just for visualizations.
 - 'release_year': Validate all games are from 2021 to 2025.
 - 'release_date': Validate all games are from 2021 to 2025 and manage rows where date is not specified.
-- 'genres' and 'categories': use a One-Hot-Encoding to parse all genres and categories to facilitate subsequent analysis.
+- 'genres' and 'categories': Deduplicate values.
 - 'price': Ensure price values are non-negative.
 - 'recommendations': Ensure price values are non-negative.
 - 'developer': Trim whitespace. Keep names for visualizations.
@@ -25,5 +25,7 @@ I adopted this structure as a standard for better project organization, discover
 - Sparse columns reduce memory usage by storing only non-zero values, something useful when training models with a lot of data. 
 - Utilized uint8 to represent binary values, significantly reducing the memory footprint compared to int64.
 - Using Parquet files preserves schema and dtypes, so I don't need to specify uint8 and datetime types on reading.
+- I can use a One-Hot-Encoding to parse all genres and categories to facilitate subsequent analysis.
 
 # Exploratory Data Analysis
+- Learned about sparse columns and how they are useful to save memory storing only non-zero values. Additionally, used uint8 to represent the 1's in a smaller format than int64.
