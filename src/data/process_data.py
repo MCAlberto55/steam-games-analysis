@@ -15,7 +15,7 @@ def freq_of_freqs(data: pd.Series) -> pd.DataFrame:
 def calculate_stadistics(column: pd.Series) -> dict:
     return {
         "count": column.count(),
-        "mean": column.mean(),
+        "mean": column.mean().round(0),
         "mode": column.mode()[0],
         "median": column.median(),
         "max": column.max(),
