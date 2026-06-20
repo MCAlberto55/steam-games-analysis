@@ -47,6 +47,8 @@ def make_plot(
     yticklabels=None,
     xticks=None,
     yticks=None,
+    yticklabels_fontz=None,
+    xticklabels_fontz=None,
     xscale="linear",
     yscale="linear",
     rotation=0,
@@ -76,12 +78,12 @@ def make_plot(
     if xticklabels is not None:
         ticks = xticks if xticks is not None else range(len(xticklabels))
         plot.set_xticks(ticks)
-        plot.set_xticklabels(xticklabels, rotation=rotation)
+        plot.set_xticklabels(xticklabels, rotation=rotation, fontsize=xticklabels_fontz)
 
     if yticklabels is not None:
         ticks = yticks if yticks is not None else range(len(yticklabels))
         plot.set_yticks(ticks)
-        plot.set_yticklabels(yticklabels, rotation=rotation)
+        plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
     plt.tight_layout()
     post_fn = POST_PROCESS.get(plot_type)
