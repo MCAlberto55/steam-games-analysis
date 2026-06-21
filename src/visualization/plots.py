@@ -89,3 +89,13 @@ def make_plot(
     post_fn = POST_PROCESS.get(plot_type)
     if post_fn is not None:
         post_fn(plot)
+
+
+def multiple_lineplot(data: list, title: str, xlabel: str, ylabel: str):
+    for obs in data:
+        plt.plot(obs["index"], obs["value"], label=obs["label"])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.legend()
+    plt.show()
