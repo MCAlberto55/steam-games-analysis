@@ -25,7 +25,9 @@ def calculate_stadistics(column: pd.Series) -> dict:
     }
 
 
-def group_and_sum(data: pd.DataFrame, groups: any, group_by: str, sum_by: str) -> list:
+def group_and_sum(
+    data: pd.DataFrame, groups: pd.Series, group_by: str, sum_by: str
+) -> list:
     grouped = data.groupby(group_by)[sum_by]
     result = []
     for group in groups:
@@ -34,7 +36,7 @@ def group_and_sum(data: pd.DataFrame, groups: any, group_by: str, sum_by: str) -
             {
                 "index": group_count.index,
                 "value": group_count.values,
-                "label": group_count,
+                "label": group,
             }
         )
     return result
