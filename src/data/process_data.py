@@ -26,12 +26,15 @@ def calculate_stadistics(column: pd.Series) -> dict:
 
 
 def group_and_sum(data: pd.DataFrame, groups: any, group_by: str, sum_by: str) -> list:
-    group_and_sum = []
-    for row in groups:
-        row_count = data.groupby(group_by).apply(
-            lambda x: x[sum_by].str.contains(row).sum()
+    grouped = data.groupby(group_by)[sum_by]
+    result = []
+    for group in groups:
+        group_count = grouped.apply(lambda x: x.str.contains(group).sum())
+        result.append(
+            {
+                "index": group_count.index,
+                "value": group_count.values,
+                "label": group_count,
+            }
         )
-        group_and_sum.append(
-            {"index": row_count.index, "value": row_count.values, "label": row}
-        )
-    return group_and_sum
+    return result
