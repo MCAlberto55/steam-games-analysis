@@ -2,31 +2,55 @@ from matplotlib.axes import Axes
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from functools import partial
 
 
-def add_bar_value(plot):
+def add_bar_value(plot, **kwargs):
     for i in plot.containers:
         plot.bar_label(i)
     return plot
 
 
-PLOT_FUNCTIONS = {
-    "bar": sns.barplot,
-    "line": sns.lineplot,
-    "box": sns.boxplot,
-    "scatter": sns.scatterplot,
-    "kdeplot": sns.kdeplot,
+def color_kde_plot(plot, color):
+    if plot.collections:
+        for collection in plot.collections:
+            collection.set_facecolor(color)
+            collection.set_edgecolor(color)
+            collection.set_alpha(0.5)
+
+
+PLOT_CONFIGS = {
+    "bar": {"fun": sns.barplot, "fill": True},
+    "line": {"fun": sns.lineplot, "marker": "o", "linewidth": 2},
+    "kdeplot": {
+        "fun": sns.kdeplot,
+        "fill": True,
+        "alpha": 0.4,
+    },
+    "box": {
+        "fun": sns.boxplot,
+        "linewidth": 1.5,
+        "fliersize": 4,
+        "notch": False,
+    },
+    "scatter": {
+        "fun": sns.scatterplot,
+        "s": 60,
+        "alpha": 0.7,
+        "marker": "o",
+    },
 }
 
 POST_PROCESS = {
     "bar": add_bar_value,
     "line": None,
     "box": None,
+    "kdeplot": color_kde_plot,
     "scatter": None,
 }
 
 """
-Set plot_type to "bar", "line", or "box" to pick the chart type.
+Set plot_type to pick the chart type.
 Pass xticklabels/yticklabels to rename tick labels; if the data's
 positions don't match range(len(labels)) (e.g. months numbered 1-12),
 pass matching xticks/yticks too. Pass hue with palette to color-group 
@@ -57,19 +81,34 @@ def make_plot(
     legend=False,
     color=None,
 ):
-    if plot_type not in PLOT_FUNCTIONS:
+    if plot_type not in PLOT_CONFIGS:
         raise ValueError(
-            f"plot_type must be one of {list(PLOT_FUNCTIONS)}, received: {plot_type!r}"
+            f"plot_type must be one of {list(PLOT_CONFIGS)}, received: {plot_type!r}"
         )
+
+    plot_conf = PLOT_CONFIGS[plot_type].copy()
+    plot_fn = plot_conf["fun"]
+    plot_conf.pop("fun")
+
+    # Use partial to inject variables for post process functions.
+    ultimate_color = color
+    post_fn_base = POST_PROCESS[plot_type]
+    post_fn = partial(post_fn_base, color=ultimate_color) if post_fn_base else None
+
+    kwargs = {
+        "data": data,
+        "x": x_col,
+        "y": y_col,
+        "ax": axes,
+    }
 
     # Avoid seaborn's "palette without hue" warning (v0.14+) by always
     # providing a hue when a palette is used:
     # - explicit hue -> use it as given
-    kwargs = {"data": data, "x": x_col, "y": y_col, "ax": axes}
     if hue is not None:
         kwargs.update(palette=palette, hue=hue, legend=legend)
 
-    plot_fn = PLOT_FUNCTIONS[plot_type]
+    kwargs.update(plot_conf)
     plot = plot_fn(**kwargs)
     plot.set_title(title)
     plot.set_xlabel(xlabel)
@@ -87,11 +126,7 @@ def make_plot(
         plot.set_yticks(ticks)
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
-    if color is not None:
-        axes.lines[0].set_color(color)
-
     plt.tight_layout()
-    post_fn = POST_PROCESS.get(plot_type)
     if post_fn is not None:
         post_fn(plot)
 
