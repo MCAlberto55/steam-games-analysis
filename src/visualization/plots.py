@@ -15,6 +15,7 @@ PLOT_FUNCTIONS = {
     "line": sns.lineplot,
     "box": sns.boxplot,
     "scatter": sns.scatterplot,
+    "kdeplot": sns.kdeplot,
 }
 
 POST_PROCESS = {
@@ -54,6 +55,7 @@ def make_plot(
     rotation=0,
     hue=None,
     legend=False,
+    color=None,
 ):
     if plot_type not in PLOT_FUNCTIONS:
         raise ValueError(
@@ -84,6 +86,9 @@ def make_plot(
         ticks = yticks if yticks is not None else range(len(yticklabels))
         plot.set_yticks(ticks)
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
+
+    if color is not None:
+        axes.lines[0].set_color(color)
 
     plt.tight_layout()
     post_fn = POST_PROCESS.get(plot_type)
