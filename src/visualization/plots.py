@@ -1,53 +1,48 @@
+"""
+Generate Seaborn charts consistently in notebooks.
+All visual customization logic lives here; the notebook just calls
+to make_plot() with the specified parameters.
+"""
+
 from matplotlib.axes import Axes
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from functools import partial
 
 
-def add_bar_value(plot, **kwargs):
-    for i in plot.containers:
-        plot.bar_label(i)
+def post_bar_plot(plot: Axes, **kwargs) -> None:
+    for container in plot.containers:
+        plot.bar_label(container)
     return plot
 
 
-def color_kde_plot(plot, color):
-    if plot.collections:
-        for collection in plot.collections:
-            collection.set_facecolor(color)
-            collection.set_edgecolor(color)
-            collection.set_alpha(0.5)
+# ---------------------------------------------------------------------------
+# Chart Type Settings
+# ---------------------------------------------------------------------------
+PLOT_FN = {
+    "bar": sns.barplot,
+    "line": sns.lineplot,
+    "kdeplot": sns.kdeplot,
+    "box": sns.boxplot,
+    "scatter": sns.scatterplot,
+}
 
-
-PLOT_CONFIGS = {
-    "bar": {"fun": sns.barplot, "fill": True},
-    "line": {"fun": sns.lineplot, "marker": "o", "linewidth": 2},
-    "kdeplot": {
-        "fun": sns.kdeplot,
-        "fill": True,
-        "alpha": 0.4,
-    },
-    "box": {
-        "fun": sns.boxplot,
-        "linewidth": 1.5,
-        "fliersize": 4,
-        "notch": False,
-    },
-    "scatter": {
-        "fun": sns.scatterplot,
-        "s": 60,
-        "alpha": 0.7,
-        "marker": "o",
-    },
+PLOT_DEFAULTS: dict[str, dict] = {
+    "bar": {"fill": True},
+    "line": {"marker": "o", "linewidth": 2},
+    "kdeplot": {"fill": True, "alpha": 0.4},
+    "box": {"linewidth": 1.5, "fliersize": 4, "notch": False},
+    "scatter": {"s": 60, "alpha": 0.7, "marker": "o"},
 }
 
 POST_PROCESS = {
-    "bar": add_bar_value,
+    "bar": post_bar_plot,
     "line": None,
     "box": None,
-    "kdeplot": color_kde_plot,
+    "kdeplot": None,
     "scatter": None,
 }
+
+VALID_PLOT_TYPES = list(PLOT_FN)
 
 """
 Set plot_type to pick the chart type.
@@ -80,36 +75,30 @@ def make_plot(
     hue=None,
     legend=False,
     color=None,
-):
-    if plot_type not in PLOT_CONFIGS:
+) -> None:
+    if plot_type not in VALID_PLOT_TYPES:
         raise ValueError(
-            f"plot_type must be one of {list(PLOT_CONFIGS)}, received: {plot_type!r}"
+            f"plot_type must be one of {VALID_PLOT_TYPES}, received: {plot_type!r}"
         )
 
-    plot_conf = PLOT_CONFIGS[plot_type].copy()
-    plot_fn = plot_conf["fun"]
-    plot_conf.pop("fun")
-
-    # Use partial to inject variables for post process functions.
-    ultimate_color = color
-    post_fn_base = POST_PROCESS[plot_type]
-    post_fn = partial(post_fn_base, color=ultimate_color) if post_fn_base else None
-
-    kwargs = {
+    # Kwargs base para la función seaborn
+    plot_kwargs: dict = {
         "data": data,
         "x": x_col,
         "y": y_col,
         "ax": axes,
+        **PLOT_DEFAULTS[plot_type],
     }
 
-    # Avoid seaborn's "palette without hue" warning (v0.14+) by always
-    # providing a hue when a palette is used:
-    # - explicit hue -> use it as given
+    # Seaborn ≥0.14 issues a "palette without hue" warning; We only add palette when there is hue.
     if hue is not None:
-        kwargs.update(palette=palette, hue=hue, legend=legend)
+        plot_kwargs.update(palette=palette, hue=hue, legend=legend)
+    if color is not None:
+        plot_kwargs.update(color=color)
 
-    kwargs.update(plot_conf)
-    plot = plot_fn(**kwargs)
+    plot = PLOT_FN[plot_type](**plot_kwargs)
+
+    # axes attributes
     plot.set_title(title)
     plot.set_xlabel(xlabel)
     plot.set_ylabel(ylabel)
@@ -127,8 +116,11 @@ def make_plot(
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
     plt.tight_layout()
+
+    # Call post process function
+    post_fn = POST_PROCESS[plot_type]
     if post_fn is not None:
-        post_fn(plot)
+        post_fn(plot, color=color)
 
 
 def multiple_lineplot(data: list, title: str, xlabel: str, ylabel: str):
