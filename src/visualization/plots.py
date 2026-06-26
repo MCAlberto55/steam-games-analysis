@@ -5,8 +5,10 @@ to make_plot() with the specified parameters.
 """
 
 from matplotlib.axes import Axes
+from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 
 def post_bar_plot(plot: Axes, **kwargs) -> None:
@@ -21,7 +23,7 @@ def post_bar_plot(plot: Axes, **kwargs) -> None:
 PLOT_FN = {
     "bar": sns.barplot,
     "line": sns.lineplot,
-    "kdeplot": sns.kdeplot,
+    "kde": sns.kdeplot,
     "box": sns.boxplot,
     "scatter": sns.scatterplot,
 }
@@ -29,7 +31,7 @@ PLOT_FN = {
 PLOT_DEFAULTS: dict[str, dict] = {
     "bar": {"fill": True},
     "line": {"marker": "o", "linewidth": 2},
-    "kdeplot": {"fill": True, "alpha": 0.4},
+    "kde": {"fill": True, "alpha": 0.4, "cut": 0},
     "box": {"linewidth": 1.5, "fliersize": 4, "notch": False},
     "scatter": {"s": 60, "alpha": 0.7, "marker": "o"},
 }
@@ -38,7 +40,7 @@ POST_PROCESS = {
     "bar": post_bar_plot,
     "line": None,
     "box": None,
-    "kdeplot": None,
+    "kde": None,
     "scatter": None,
 }
 
@@ -74,6 +76,7 @@ def make_plot(
     rotation=0,
     hue=None,
     legend=False,
+    legend_label=None,
     color=None,
 ) -> None:
     if plot_type not in VALID_PLOT_TYPES:
@@ -92,11 +95,16 @@ def make_plot(
 
     # Seaborn ≥0.14 issues a "palette without hue" warning; We only add palette when there is hue.
     if hue is not None:
-        plot_kwargs.update(palette=palette, hue=hue, legend=legend)
+        plot_kwargs.update(hue=hue, palette=palette, legend=legend)
+    elif legend is not False:
+        plot_kwargs.update(legend=legend, label=legend_label)
     if color is not None:
         plot_kwargs.update(color=color)
 
     plot = PLOT_FN[plot_type](**plot_kwargs)
+
+    if legend is not False:
+        plot.legend()
 
     # axes attributes
     plot.set_title(title)
