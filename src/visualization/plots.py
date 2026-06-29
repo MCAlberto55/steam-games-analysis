@@ -120,6 +120,7 @@ def make_plot(
 
     if yticklabels is not None:
         ticks = yticks if yticks is not None else range(len(yticklabels))
+        print(ticks)
         plot.set_yticks(ticks)
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
