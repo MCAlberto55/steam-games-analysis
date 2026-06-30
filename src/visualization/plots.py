@@ -5,10 +5,10 @@ to make_plot() with the specified parameters.
 """
 
 from matplotlib.axes import Axes
-from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import pandas as pd
 
 
 def post_bar_plot(plot: Axes, **kwargs) -> None:
@@ -56,28 +56,28 @@ by a column.
 
 
 def make_plot(
-    plot_type,
-    x_col,
-    y_col,
-    title,
-    xlabel=None,
-    ylabel=None,
-    data=None,
-    axes=None,
-    palette=None,
-    xticklabels=None,
-    yticklabels=None,
-    xticks=None,
-    yticks=None,
-    yticklabels_fontz=None,
-    xticklabels_fontz=None,
-    xscale="linear",
-    yscale="linear",
-    rotation=0,
-    hue=None,
-    legend=False,
-    legend_label=None,
-    color=None,
+    plot_type: str,
+    x_col: str | pd.Series,
+    y_col: str | pd.Series,
+    title: str,
+    xlabel: str = None,
+    ylabel: str = None,
+    data: pd.DataFrame = None,
+    axes: Axes = None,
+    palette: str = None,
+    xticklabels: np.ndarray = None,
+    yticklabels: np.ndarray = None,
+    xticks: np.ndarray = None,
+    yticks: np.ndarray = None,
+    yticklabels_fontz: int = None,
+    xticklabels_fontz: int = None,
+    xscale: str = "linear",
+    yscale: str = "linear",
+    rotation: int = 0,
+    hue: pd.Series = None,
+    legend: bool = False,
+    legend_label: str = None,
+    color: str = None,
 ) -> None:
     if plot_type not in VALID_PLOT_TYPES:
         raise ValueError(
@@ -120,7 +120,6 @@ def make_plot(
 
     if yticklabels is not None:
         ticks = yticks if yticks is not None else range(len(yticklabels))
-        print(ticks)
         plot.set_yticks(ticks)
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
