@@ -1,10 +1,10 @@
 import kagglehub
 import pandas as pd
 import os
-from src.config import RAW_DATA_PATH
+from src.utils.config import RAW_DATA_PATH
 
 
-def get_data():
+def download_data():
 
     path = kagglehub.dataset_download(RAW_DATA_PATH)
 
