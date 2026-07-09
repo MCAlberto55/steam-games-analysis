@@ -1,0 +1,26 @@
+{
+    "popular_genres": [
+        "Indie",
+        "Casual",
+        "Adventure",
+        "Action",
+        "Simulation",
+        "Strategy",
+        "RPG",
+        "Free To Play",
+        "Early Access",
+        "Sports",
+        "Racing"
+    ],
+    "popular_categories": [
+        "Single-player",
+        "Family Sharing",
+        "Steam Achievements",
+        "Steam Cloud",
+        "Full controller support",
+        "Multi-player",
+        "Partial Controller Support",
+        "PvP",
+        "Co-op"
+    ]
+}
