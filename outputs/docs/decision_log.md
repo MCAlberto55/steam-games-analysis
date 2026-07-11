@@ -57,7 +57,7 @@ __Based on the EDA findings__:
     - *release_year* was excluded to prevent cluster bias (the transformed year representations would not vary enough between clusters).
     - Apply `One-Hot-Encoding` to relevant, high-frequency genres and categories to convert them into numeric features.
     - Apply `log1p` to mitigate the influence of outliers on _price_ and _recommendations_.
-    - Use the `sigmoid` function to scale the `log1p` results between 0 and 1.
+    - Use the `StandardScaler` function to scale the `log1p` columns. This prevents high-scale features like _price_ from dominating the variance of other numerical variables (such as _recommendations_ and `log1p` columns) due to scale differences, ensuring balanced feature weights for optimal `PCA` visualization and model performance.
 
 __Data Type Optimization__:
 Transform numeric columns to `int8` and `float32` as a best practice to reduce training memory footprint and improve performance.
