@@ -11,3 +11,8 @@ def get_validated_data():
 def get_featured_data():
     Featured_data = pd.read_parquet(FEATURE_ENGINEERED_DATA_PATH, index_col=0)
     return Featured_data
+
+
+def get_feature_engineered_data():
+    Feature_engineered_data = pd.read_parquet(FEATURE_ENGINEERED_DATA_PATH)
+    return Feature_engineered_data
