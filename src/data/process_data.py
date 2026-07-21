@@ -43,9 +43,8 @@ def group_and_sum(
     return result
 
 
-def tfidf_weight_binary(df, cols):
-    X = df[cols].values.astype(float)
-    n_docs = X.shape[0]
-    df_freq = X.sum(axis=0)
-    idf = np.log(n_docs / (df_freq + 1)) + 1
-    return (X * idf).astype("float32")
+def tfidf_weight_binary(data: pd.DataFrame):
+    rows = data.shape[0]
+    frequencies = data.sum(axis=0)
+    idf = np.log(rows / (frequencies + 1)) + 1
+    return (data * idf).astype("float32")
