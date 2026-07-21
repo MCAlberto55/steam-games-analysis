@@ -22,5 +22,19 @@
         "Partial Controller Support",
         "PvP",
         "Co-op"
+    ],
+    "redundant_correlation_features": [
+        "PvP",
+        "Co-op",
+        "Family Sharing"
+    ],
+    "no_modelable_columns": [
+        "name",
+        "release_year",
+        "release_date",
+        "genres",
+        "categories",
+        "developer",
+        "publisher"
     ]
 }
