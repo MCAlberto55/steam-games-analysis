@@ -25,7 +25,8 @@
     ],
     "redundant_correlation_features": [
         "PvP",
-        "Co-op"
+        "Co-op",
+        "Family Sharing"
     ],
     "no_modelable_columns": [
         "name",
