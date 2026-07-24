@@ -1,0 +1,23 @@
+{
+    "genres": [
+        "Indie",
+        "Casual",
+        "Adventure",
+        "Action",
+        "Simulation",
+        "Strategy",
+        "RPG",
+        "Free To Play",
+        "Early Access",
+        "Sports",
+        "Racing"
+    ],
+    "categories": [
+        "Single-player",
+        "Steam Achievements",
+        "Steam Cloud",
+        "Full controller support",
+        "Multi-player",
+        "Partial Controller Support"
+    ]
+}
