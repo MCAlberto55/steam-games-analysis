@@ -138,6 +138,7 @@ def multiple_lineplot(data: list, title: str, xlabel: str, ylabel: str):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.legend()
+    plt.tight_layout()
     plt.show()
 
 
