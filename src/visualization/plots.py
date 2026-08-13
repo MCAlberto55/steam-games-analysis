@@ -95,7 +95,7 @@ def make_plot(
 
     # Seaborn ≥0.14 issues a "palette without hue" warning; We only add palette when there is hue.
     if hue is not None:
-        plot_kwargs.update(hue=hue, palette=palette, legend=legend)
+        plot_kwargs.update(hue=hue, palette=palette, legend=legend, label=legend_label)
     elif legend is not False:
         plot_kwargs.update(legend=legend, label=legend_label)
     if color is not None:
@@ -124,6 +124,7 @@ def make_plot(
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
     plt.tight_layout()
+    plt.grid(True, alpha=0.3)
 
     # Call post process function
     post_fn = POST_PROCESS[plot_type]
