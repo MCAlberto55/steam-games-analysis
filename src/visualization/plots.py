@@ -95,7 +95,7 @@ def make_plot(
 
     # Seaborn ≥0.14 issues a "palette without hue" warning; We only add palette when there is hue.
     if hue is not None:
-        plot_kwargs.update(hue=hue, palette=palette, legend=legend, label=legend_label)
+        plot_kwargs.update(hue=hue, palette=palette, legend=legend)
     elif legend is not False:
         plot_kwargs.update(legend=legend, label=legend_label)
     if color is not None:
