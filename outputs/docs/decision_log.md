@@ -67,23 +67,23 @@ __Based on the EDA findings__:
 __Data Type Optimization__:
 Transform numeric columns to `int8` and `float32` as a best practice to reduce training memory footprint and improve performance.
 
-# Model Trainig
-I decided to compare two approach in order to compare wich one is capable to generate more predictable clusters.
+# Model Training
+I decided to compare two approaches in order to determine which one is capable of genereting more predictable clusters.
 
 __Weighted Data__ 
-- Use `IDF` (Inverse Document Frequency) dataset to assign a weight to every genre and category so most commons have a lower weight and less commons will influence more. With this approach i tried to generate significant differentiation among clusters letting less common features influence more at every cluster.
-- Use `PCA` to visualice data.
-- Use deafault `Kmeans` (euclidean distance) trainig model to generate clusters. The idea is to let less common genres and categories to be a "bias" for the clústers.
-- Test `Elbow Method` and `Silhouette Score` to decide wich number of clusters is the best to have distinguishable clusters.
+- Use `IDF` (Inverse Document Frequency) dataset to assign a weight to every genre and category so most common ones have a lower weight and less common ones will influence more. With this approach i tried to generate significant differentiation among clusters letting less common features influence more at every cluster.
+- Use `PCA` to visualize data.
+- Use default `Kmeans` (euclidean distance) Training model to generate clusters. The idea is let less common genres and categories to be a "bias" for the clústers.
+- Test `Elbow Method` and `Silhouette Score` to decide which number of clusters is the best to have distinguishable clusters.
 
 
 __OHE Data__ 
-- Use `One Hot Encoded` dataset to generate boolean columns for genres and categories. This mixed dataset is the "most correct" way no manage this data in theory.
-- Use `FAMD` (Factor Analysis of Mixed Data) to visualice data, the data have categorical and continuous features.
-- Use default `Kprototypes` trainig model to generate clusters. The idea is to test the most correct methodology for this data. This method combines `Kmeans` and `Kmodes` methodology, so both types to data contribute to the model as they are.
-- Test `Elbow Method` and `Silhouette Score` with sampled data and gower distence to decide wich number of clusters is the best to have distinguishable clusters.
+- Use `One Hot Encoded` dataset to generate boolean columns for genres and categories. This mixed dataset is the "most correct" way to manage this data in theory.
+- Use `FAMD` (Factor Analysis of Mixed Data) to visualize data, the data have categorical and continuous features.
+- Use default `Kprototypes` Training model to generate clusters. The idea is to test the most correct methodology for this data. This method combines `Kmeans` and `Kmodes` methodology, so both types to data contribute to the model as they are.
+- Test `Elbow Method` and `Silhouette Score` with sampled data and gower distance to decide which number of clusters is the best to have distinguishable clusters.
 ## Lessons learned
-The test method to define a optimal K value are useful, but I need to add the fact that I need to create interpretable and useful clusters, so I decided the optimal K value comparing the results of every method and testing the interpretability of models generated with different K values.
-Despite both methods try to generate differentiable clusters, high frequency genres and categories still influence the results. However, the intention is to test with one generate clusters that can be predictable with a supervised model.
-At the end, values of genres and recommendations are wich define the clusters. High value at price or recommendations, low or high value at both features are key to define and label the clusters.
-Wighted data has interesting results, but it is hard to define labels for every cluster because how can I define and label a cluster wich has more _action_ and less _single-player_ than other? It would very interesting on a balanced dataset, but the nature of the data doesn't allow me to generate that kind of processing (multi-categorical).   
+The test methods to define an optimal K value are useful, but I need to add the fact that I need to create interpretable and useful clusters, so I decided the optimal K value comparing the results of every method and testing the interpretability of models generated with different K values.
+Despite both methods try to generate differentiable clusters, high frequency genres and categories still influence the results. However, the intention is to test which method produces a dataset that is better for predictions on a supervised model.
+Clusters are still mainly determined by the values of the "price" and "recommendations" features. When both are high, they tend to form one cluster; when both are low, they tend to form another; and when they are inverse (one high and one low), they tend to form yet another cluster. Both methods share this pattern. 
+Weighted data has interesting results, but it is hard to define labels for every cluster because how can I define and label a cluster which has more _action_ and less _single-player_ than another? It would be very interesting on a balanced dataset, but the nature of the data doesn't allow me to generate that kind of processing (multi-categorical).   
