@@ -74,7 +74,7 @@ def make_plot(
     xscale: str = "linear",
     yscale: str = "linear",
     rotation: int = 0,
-    hue: pd.Series = None,
+    hue: pd.Series | str = None,
     legend: bool = False,
     legend_label: str = None,
     color: str = None,
@@ -124,6 +124,7 @@ def make_plot(
         plot.set_yticklabels(yticklabels, rotation=rotation, fontsize=yticklabels_fontz)
 
     plt.tight_layout()
+    plt.grid(True, alpha=0.3)
 
     # Call post process function
     post_fn = POST_PROCESS[plot_type]
@@ -138,4 +139,36 @@ def multiple_lineplot(data: list, title: str, xlabel: str, ylabel: str):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+def multiple_scatterplot(
+    data: pd.DataFrame,
+    title: str,
+    x_col: str,
+    y_col: str,
+    n: int,
+    m: int,
+    hue_values: pd.DataFrame,
+    xsize: int,
+    ysize: int,
+):
+    fig, axes = plt.subplots(n, m, figsize=(xsize, ysize))
+    fig.suptitle(title, fontsize=16)
+
+    axes = np.array(axes).reshape(-1)
+    total_cols = hue_values.shape[1]
+
+    for idx, ax in enumerate(axes):
+        if idx >= total_cols:
+            ax.axis("off")
+            continue
+        sns.scatterplot(
+            data=data,
+            x=x_col,
+            y=y_col,
+            ax=ax,
+            hue=hue_values.iloc[:, idx],
+        )
     plt.show()

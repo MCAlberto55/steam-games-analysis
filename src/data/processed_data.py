@@ -1,7 +1,7 @@
 import pandas as pd
 from src.utils.config import VALIDATED_DATA_PATH
 from src.utils.config import FE_OHE_DATA_PATH
-from src.utils.config import FE_WEIGHTED_DATA_FILE_NAME
+from src.utils.config import FE_WEIGHTED_DATA_PATH
 
 
 def get_validated_data():
@@ -15,5 +15,5 @@ def get_fe_ohe_data():
 
 
 def get_fe_weighted_data():
-    Feature_engineered_data = pd.read_parquet(FE_WEIGHTED_DATA_FILE_NAME)
+    Feature_engineered_data = pd.read_parquet(FE_WEIGHTED_DATA_PATH)
     return Feature_engineered_data
