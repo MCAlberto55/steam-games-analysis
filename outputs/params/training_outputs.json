@@ -1,0 +1,25 @@
+{
+    "numeric_cols": [
+        "price",
+        "recommendations"
+    ],
+    "categorical_cols": [
+        "Indie",
+        "Casual",
+        "Adventure",
+        "Action",
+        "Simulation",
+        "Strategy",
+        "RPG",
+        "Free To Play",
+        "Early Access",
+        "Sports",
+        "Racing",
+        "Single-player",
+        "Steam Achievements",
+        "Steam Cloud",
+        "Full controller support",
+        "Multi-player",
+        "Partial Controller Support"
+    ]
+}
