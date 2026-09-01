@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 from src.utils.config import (
+    EDA_OUTPUT_PARAMS_PATH,
     FE_OHE_DATA_PATH,
     FE_OUTPUT_PARAMS_PATH,
     FE_WEIGHTED_DATA_PATH,
@@ -8,6 +9,7 @@ from src.utils.config import (
     OHE_TEST_LABELS_PATH,
     TRAINING_OUTPUT_PARAMS_PATH,
     TRAINING_SET_PATH,
+    VALIDATED_DATA_PATH,
     VALIDATION_SET_PATH,
     WEIGHTED_DATAFRAME_LABELS,
     WEIGHTED_TEST_LABELS_PATH,
@@ -15,6 +17,10 @@ from src.utils.config import (
 
 
 # Dataframes
+def export_validated_data(data):
+    data.to_parquet(VALIDATED_DATA_PATH, index=False)
+
+
 def export_fe_weighted_data(data: pd.DataFrame):
     data.to_parquet(FE_WEIGHTED_DATA_PATH, index=True)
 
@@ -48,6 +54,11 @@ def export_weighted_Ytest(data: pd.DataFrame):
 
 
 # Params
+def export_eda_params(params: dict):
+    with open(EDA_OUTPUT_PARAMS_PATH, "w", encoding="utf-8") as f:
+        json.dump(params, f, ensure_ascii=False, indent=4)
+
+
 def export_fe_params(params: dict):
     with open(FE_OUTPUT_PARAMS_PATH, "w", encoding="utf-8") as f:
         json.dump(params, f, ensure_ascii=False, indent=4)
