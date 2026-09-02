@@ -84,6 +84,14 @@ __OHE Data__
 - Test `Elbow Method` and `Silhouette Score` with sampled data and gower distance to decide which number of clusters is the best to have distinguishable clusters.
 ## Lessons learned
 The test methods to define an optimal K value are useful, but I need to add the fact that I need to create interpretable and useful clusters, so I decided the optimal K value comparing the results of every method and testing the interpretability of models generated with different K values.
-Despite both methods try to generate differentiable clusters, high frequency genres and categories still influence the results. However, the intention is to test which method produces a dataset that is better for predictions on a supervised model.
+Despite both methods trying to generate distinguishable clusters, high frequency genres and categories still influence the results. However, the intention is to test which method produces a dataset that is better for training a supervised model capable of correctly predicting new data.
 Clusters are still mainly determined by the values of the "price" and "recommendations" features. When both are high, they tend to form one cluster; when both are low, they tend to form another; and when they are inverse (one high and one low), they tend to form yet another cluster. Both methods share this pattern. 
-Weighted data has interesting results, but it is hard to define labels for every cluster because how can I define and label a cluster which has more _action_ and less _single-player_ than another? It would be very interesting on a balanced dataset, but the nature of the data doesn't allow me to generate that kind of processing (multi-categorical).   
+Weighted data has interesting results, but it is hard to define labels for every cluster because how can I define and label a cluster which has more _action_ and less _single-player_ than another? It would be very interesting on a balanced dataset, but the nature of the data doesn't allow me to generate that kind of processing (reducing the amount of games with a specific genre will also reduce the amount in other genres as a collateral effect).   
+
+# Model Evaluation
+The intention of this training is to generate a supervised model capable of labeling new unseen data. Keeping that in mind, I took the following decisions:
+- Use a model capable of learning the frontier of the previous clustering, so I decided to use random forest, which can meet this requirement.
+- I trained a model for every clustering method, so I generated two random forest models.
+- Evaluate the training set with its respective training labels. The score should be high because the models are learning from the previous clustering.
+- Evaluate the resultant models with test data. The scores might be high if the data shows the same patterns among the five years spanned by the original dataset. I used KFold to evaluate and average the performance of the model throughout all the test data.
+- Add noise to the test data and compare predictions on the original test set and the noisy test set.
